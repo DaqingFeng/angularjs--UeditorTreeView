@@ -1,0 +1,118 @@
+﻿
+<meta http-equiv="content-type" content="text/html; charset=UTF8">
+<link href="./plugins/BootStrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="./plugins/BootStrap/fonts/font-awesome.min.css" rel="stylesheet" />
+<link href="./plugins/NgTreeView/abn_tree.css" rel="stylesheet" />
+<div ng-app="AppModule">
+    <div class="content" ng-controller="RequireMentCtr" ng-init="Init(@(isnewdoc?"true":"false"))">
+        <div class="row">
+            <div class="col-lg-2" style="background:whitesmoke;border:1px solid lightgray;">
+                <abn-tree tree-data="MyFuncs"
+                          tree-control="RequireMentCtr"
+                          icon-leaf="fa fa-file"
+                          icon-Leafdeep-One="fa fa-file-word-o"
+                          icon-Leafdeep-Two="fa fa-file-text-o"
+                          on-select="tree_handler(branch)"
+                          expand-level="3"
+                          initial-selection="Vegetable">
+                </abn-tree>
+            </div>
+            <div class="col-lg-10" ng-if="currentFunc!=null">
+                <div class="panel panel-primary slideInUp">
+                    <div class="panel-heading slideInUp">
+                        <div class="row">
+                            <div class="colfunc" style="float:left;margin-left:20px">功能项</div>
+                            <div class="coloperation" style="float:right">
+                                <i class="fa fa-edit" style="color:white;cursor:pointer;padding-right:10px"
+                                   ng-show="currentFunc.IsDisabled"
+                                   ng-model="currentFunc.FuncID"
+                                   ng-click="ChangeFuncState(currentFunc.FuncID,false)"></i>
+                                <i class="fa fa-trash  icon-th-large" ng-click="DeleteFunc(currentFunc.FuncID)" style="color:white;cursor:pointer;margin-right:10px" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body" ng-if="ShowControl.ShowLevel>=1&&ShowControl.FuncID==currentFunc.FuncID">
+                        <!--主功能-->
+                        <div class="form-group">
+                            <label class="control-label">功能描述</label>
+                            <input class="form-control" ng-model="currentFunc.FuncName" ng-value="currentFunc.FuncName" placeholder="功能描述信息" ng-disabled="currentFunc.IsDisabled" />
+                            <div ng-show="currentFunc.IsDisabled==false">
+                                <!--子功能-->
+                                <div ng-repeat="chfunc in currentFunc.children track by $index">
+                                    <br />
+                                    <div class="panel panel-default" ng-if="ShowControl.ShowLevel>=2&&ShowControl.ChildFuncID==chfunc.ChildFuncID">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <label class="control-label" style="font-size:14px;float:left;margin-left:20px">{{$index+1}}. 子功能点</label>
+                                                <i class="fa fa-trash  icon-th-large" ng-click="DeleteChildfunc(currentFunc.FuncID,chfunc.ChildFuncID)" style="color:gray;cursor:pointer;float:right;margin-right:10px" aria-hidden="true"></i>
+                                            </div>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="from-group">
+
+                                                <label class="control-label">功能点描述</label>
+                                                <input class="form-control" ng-model="chfunc.FuncName" ng-value="chfunc.FuncName" placeholder="功能点信息描述" ng-disabled="currentFunc.IsDisabled" />
+
+                                                <!--子需求-->
+                                                <br />
+                                                <div ng-repeat="req in chfunc.children track by $index" ng-if="ShowControl.ShowLevel>=2&&ShowControl.RequireMentID==req.RequireMentID">
+                                                    <div class="panel panel-default">
+                                                        <div class="panel-heading">
+                                                            <div class="row">
+                                                                <label class="control-label" style="font-size:12px;float:left;margin-left:20px">{{$index+1}}. 需求</label>
+                                                                <i class="fa fa-trash  icon-th-large" ng-click="DeleteRequireMent(currentFunc.FuncID,chfunc.ChildFuncID,req.RequireMentID)" style="color:gray;cursor:pointer;float:right;margin-right:10px" aria-hidden="true"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="panel-body">
+                                                            <div class="from-group">
+                                                                <label class="control-label">需求描述</label>
+                                                                <input class="form-control" ng-model="req.RequireName" ng-value="req.RequireName" placeholder="需求信息描述" ng-disabled="currentFunc.IsDisabled" />
+
+                                                                <br />
+                                                                <div class="from-group">
+                                                                    <label class="control-label">需求详情</label>
+                                                                    <div class="panel">
+                                                                        <div class="ueditor" id="container{{req.RequireMentID}}" name="content" ng-model="req.RequireMentDetail.Content" config="_UeditorConfig" required></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <a class="btn btn-app btn-xs btn-default" ng-click="AddRequireMent(currentFunc.FuncID,chfunc.ChildFuncID)">
+                                                    <i class="fa fa-plus"></i> 需求
+                                                </a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <a class="btn btn-app btn-sm btn-default" ng-click="AddChildFunc(currentFunc.FuncID)">
+                                    <i class="fa fa-plus"></i>子功能
+                                </a>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row inline">
+                            <div class="colnewfunc" style="float:left;margin-left:20px">
+                                <a class="btn btn-app btn btn-default" ng-click="Init(true);">
+                                    <i class="fa fa-plus"></i> 新增功能
+                                </a>
+                            </div>
+                            <div class="colfuncsubmit" style="float:right;margin-right:20px" ng-show="currentFunc.IsDisabled==false">
+                                <input type="button" class="btn btn-outline btn-primary " name="" value="保 存">
+                                <input type="button" class="btn btn-default text-warning" name="" ng-click="ChangeFuncState(currentFunc.FuncID,true)" value="取消">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type='text/javascript' scr="app/plugins/Ueditor/ueditor.config.js" ></script>
+<script type='text/javascript' scr="app/plugins/Ueditor/ueditor.all.js" ></script>
+<script type='text/javascript' scr="app/build/requirementpage.bundle.js" ></script>
+
