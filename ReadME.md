@@ -14,3 +14,6 @@ It can support AngularPlugins to reference like Angular-route dadadada ....
 * The webpack will be build bundler file and you can see the example.html to showing effect.
 
 
+Demo Runing like 
+
+![image](https://github.com/DaqingFeng/Webpack-Angularjs1.x--Ueditor-ES6-TreeView/blob/master/Demo.png)
