@@ -16,4 +16,4 @@ It can support AngularPlugins to reference like Angular-route dadadada ....
 
 Demo Runing like 
 
-![image](https://github.com/DaqingFeng/Webpack-Angularjs1.x--Ueditor-ES6-TreeView/blob/master/Demo.png)
+![image](https://raw.githubusercontent.com/DaqingFeng/Webpack-Angularjs1.x--Ueditor-ES6-TreeView/master/Demo.png)
